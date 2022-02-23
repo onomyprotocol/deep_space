@@ -1,7 +1,7 @@
 use crate::address::Address;
+use crate::Uint256;
 use cosmos_sdk_proto::cosmos::base::v1beta1::Coin as ProtoCoin;
 use cosmos_sdk_proto::cosmos::tx::v1beta1::Fee as ProtoFee;
-use num256::Uint256;
 use std::convert::TryFrom;
 use std::fmt;
 use std::str::FromStr;
@@ -29,6 +29,8 @@ impl TryFrom<&str> for Coin {
 }
 
 impl FromStr for Coin {
+    // note: this can't be `FromStrRadixErr` because it does not implement `Error`
+    // (because of no_std) and this causes problems downstream
     type Err = String;
 
     fn from_str(value: &str) -> Result<Self, Self::Err> {
@@ -41,7 +43,7 @@ impl FromStr for Coin {
             }
         }
         let (amount, denom) = value.split_at(split_idx);
-        match amount.parse() {
+        match Uint256::from_dec_or_hex_str_restricted(amount) {
             Ok(v) => Ok(Coin {
                 amount: v,
                 denom: denom.to_string(),
@@ -70,7 +72,7 @@ impl From<ProtoCoin> for Coin {
     fn from(value: ProtoCoin) -> Self {
         Coin {
             denom: value.denom,
-            amount: value.amount.parse().unwrap(),
+            amount: Uint256::from_dec_or_hex_str_restricted(&value.amount).unwrap(),
         }
     }
 }

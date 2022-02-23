@@ -3,6 +3,7 @@
 
 use super::{ChainStatus, PAGE};
 use crate::error::CosmosGrpcError;
+use crate::Uint256;
 use crate::{Address, Coin, Contact, Msg, PrivateKey};
 use cosmos_sdk_proto::cosmos::base::abci::v1beta1::TxResponse;
 use cosmos_sdk_proto::cosmos::base::v1beta1::DecCoin;
@@ -22,12 +23,10 @@ use cosmos_sdk_proto::cosmos::distribution::v1beta1::{
 use cosmos_sdk_proto::cosmos::distribution::v1beta1::{
     QueryDelegationTotalRewardsResponse, QueryDelegatorValidatorsRequest,
 };
-use num256::Uint256;
-use num_bigint::ParseBigIntError;
 use std::time::Duration;
 
 // required because dec coins are multiplied by 1*10^18
-const ONE_ETH: u128 = 10u128.pow(18);
+const ONE_ETH: Uint256 = Uint256::from_u128(10u128.pow(18));
 
 impl Contact {
     /// Gets a list of coins in the community pool, note returned values from this endpoint
@@ -41,11 +40,11 @@ impl Contact {
         let val = res.into_inner().pool;
         let mut res = Vec::new();
         for v in val {
-            let parse_result: Result<Uint256, ParseBigIntError> = v.amount.parse();
+            let parse_result = Uint256::from_dec_or_hex_str_restricted(&v.amount);
             match parse_result {
                 Ok(parse_result) => res.push(Coin {
                     denom: v.denom,
-                    amount: parse_result / ONE_ETH.into(),
+                    amount: parse_result.divide(ONE_ETH).unwrap().0,
                 }),
                 Err(e) => return Err(CosmosGrpcError::ParseError { error: e }),
             }

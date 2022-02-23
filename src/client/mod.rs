@@ -121,7 +121,7 @@ mod tests {
 
         let send = Coin {
             denom: token_name,
-            amount: 100u64.into(),
+            amount: crate::u256!(100),
         };
         contact
             .send_coins(send.clone(), Some(send), destination, Some(TIMEOUT), key)
