@@ -1,10 +1,11 @@
 use crate::address::Address;
+use crate::Uint256;
 use cosmos_sdk_proto::cosmos::base::v1beta1::Coin as ProtoCoin;
 use cosmos_sdk_proto::cosmos::tx::v1beta1::Fee as ProtoFee;
-use num256::Uint256;
 use std::convert::TryFrom;
 use std::fmt;
 use std::str::FromStr;
+use u64_array_bigints::FromStrRadixErr;
 
 /// Coin holds some amount of one currency we convert from ProtoCoin to do more
 /// validation and provide a generally nicer interface
@@ -21,7 +22,7 @@ impl fmt::Display for Coin {
 }
 
 impl TryFrom<&str> for Coin {
-    type Error = String;
+    type Error = FromStrRadixErr;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         value.parse()
@@ -29,7 +30,7 @@ impl TryFrom<&str> for Coin {
 }
 
 impl FromStr for Coin {
-    type Err = String;
+    type Err = FromStrRadixErr;
 
     fn from_str(value: &str) -> Result<Self, Self::Err> {
         let value = value.trim();
@@ -41,12 +42,12 @@ impl FromStr for Coin {
             }
         }
         let (amount, denom) = value.split_at(split_idx);
-        match amount.parse() {
+        match Uint256::from_dec_or_hex_str(amount) {
             Ok(v) => Ok(Coin {
                 amount: v,
                 denom: denom.to_string(),
             }),
-            Err(e) => Err(e.to_string()),
+            Err(e) => Err(e),
         }
     }
 }
@@ -70,7 +71,7 @@ impl From<ProtoCoin> for Coin {
     fn from(value: ProtoCoin) -> Self {
         Coin {
             denom: value.denom,
-            amount: value.amount.parse().unwrap(),
+            amount: Uint256::from_dec_or_hex_str(&value.amount).unwrap(),
         }
     }
 }

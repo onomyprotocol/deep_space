@@ -3,7 +3,6 @@ use crate::utils::FeeInfo;
 use base64::DecodeError as Base64DecodeError;
 use cosmos_sdk_proto::cosmos::base::abci::v1beta1::TxResponse;
 use fmt::Debug;
-use num_bigint::ParseBigIntError;
 use prost::DecodeError;
 use prost::EncodeError;
 use secp256k1::Error as CurveError;
@@ -17,6 +16,7 @@ use std::{error::Error, str::Utf8Error};
 use std::{fmt, time::Duration};
 use tonic::transport::Error as TonicError;
 use tonic::Status;
+use u64_array_bigints::FromStrRadixErr;
 
 #[derive(Debug)]
 pub enum CosmosGrpcError {
@@ -51,7 +51,7 @@ pub enum CosmosGrpcError {
         fee_info: FeeInfo,
     },
     ParseError {
-        error: ParseBigIntError,
+        error: FromStrRadixErr,
     },
     GasRequiredExceedsBlockMaximum {
         max: u64,

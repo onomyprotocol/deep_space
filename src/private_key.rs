@@ -11,7 +11,7 @@ use cosmos_sdk_proto::cosmos::tx::v1beta1::Tx;
 use cosmos_sdk_proto::cosmos::tx::v1beta1::{
     mode_info, AuthInfo, ModeInfo, SignDoc, SignerInfo, TxBody, TxRaw,
 };
-use num_bigint::BigUint;
+use num::BigUint;
 use prost::Message;
 use secp256k1::constants::CURVE_ORDER as CurveN;
 use secp256k1::Message as CurveMessage;

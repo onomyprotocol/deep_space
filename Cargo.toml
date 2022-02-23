@@ -8,34 +8,32 @@ license = "Apache-2.0"
 edition = "2021"
 
 [dependencies]
-num256 = "0.3"
-sha2 = "0.10"
-num-bigint = "0.4"
-num-traits = "0.2"
-ripemd = "0.1"
-bech32 = "0.8"
-serde = "1.0"
-serde_json = "1.0"
-serde_derive = "1.0"
 base64 = "0.13"
-unicode-normalization = {version = "0.1"}
-prost-types = "0.9"
+bech32 = "0.8"
+bytes = "1.0"
+cosmos-sdk-proto = { package = "cosmos-sdk-proto-althea", version = "0.9" }
+hmac = { version = "0.12" }
+log = "0.4"
+num = "0.4"
+pbkdf2 = { version = "0.10" }
 prost = "0.9"
-pbkdf2 = {version = "0.10"}
-hmac = {version = "0.12"}
-rand = {version = "0.8"}
+prost-types = "0.9"
+rand = { version = "0.8" }
+ripemd = "0.1"
 rust_decimal = "1.9"
 secp256k1 = "0.21"
-tonic = {version = "0.6", features = ["compression"]}
-bytes = "1.0"
-cosmos-sdk-proto = {package = "cosmos-sdk-proto-althea", version = "0.9"}
-log = "0.4"
-tokio = {version = "1", features=["time"]}
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+sha2 = "0.10"
+tokio = { version = "1", features = ["time"] }
+tonic = { version = "0.6", features = ["compression"] }
+u64_array_bigints = { git = "https://github.com/AaronKutch/u64_array_bigints.git", rev = "3637379aefb03d124f0a902ea7c9e4e64f7ddba7" }
+unicode-normalization = { version = "0.1" }
 
 [dev-dependencies]
-rand = "0.8"
-env_logger = "0.9"
 actix-rt = "2.2"
-
+env_logger = "0.9"
+rand = "0.8"
 
 [features]

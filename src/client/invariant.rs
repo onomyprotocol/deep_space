@@ -58,14 +58,14 @@ impl Contact {
     /// ```rust
     /// use cosmos_sdk_proto::cosmos::bank::v1beta1::MsgSend;
     /// use cosmos_sdk_proto::cosmos::tx::v1beta1::BroadcastMode;
-    /// use deep_space::{Coin, client::Contact, Fee, MessageArgs, Msg, PrivateKey};
+    /// use deep_space::{Coin, client::Contact, Fee, MessageArgs, Msg, PrivateKey, u256};
     /// use std::time::Duration;
     /// let private_key = PrivateKey::from_secret("mySecret".as_bytes());
     /// let public_key = private_key.to_public_key("cosmospub").unwrap();
     /// let address = public_key.to_address();
     /// let coin = Coin {
     ///     denom: "validatortoken".to_string(),
-    ///     amount: 1u32.into(),
+    ///     amount: u256!(1),
     /// };
     /// let contact = Contact::new("https:://your-grpc-server", Duration::from_secs(5), "prefix").unwrap();
     /// // future must be awaited in tokio runtime

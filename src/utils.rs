@@ -171,6 +171,7 @@ pub fn encode_any(input: impl prost::Message, type_url: impl Into<String>) -> An
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
+    use crate::u256;
 
     #[test]
     fn test_determine_fees() {
@@ -192,11 +193,11 @@ mod tests {
             min_fees: vec![
                 Coin {
                     denom: "ualtg".to_string(),
-                    amount: 50000u64.into(),
+                    amount: u256!(50000),
                 },
                 Coin {
                     denom: "ufootoken".to_string(),
-                    amount: 250000u64.into(),
+                    amount: u256!(250000),
                 },
             ],
         });

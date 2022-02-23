@@ -1,5 +1,6 @@
 extern crate deep_space;
 use cosmos_sdk_proto::cosmos::bank::v1beta1::MsgSend;
+use deep_space::u256;
 use deep_space::Fee;
 use deep_space::Msg;
 use deep_space::PrivateKey;
@@ -21,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let coin = Coin {
         denom: "validatortoken".to_string(),
-        amount: 1u32.into(),
+        amount: u256!(1),
     };
 
     let send = MsgSend {
