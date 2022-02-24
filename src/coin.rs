@@ -5,7 +5,6 @@ use cosmos_sdk_proto::cosmos::tx::v1beta1::Fee as ProtoFee;
 use std::convert::TryFrom;
 use std::fmt;
 use std::str::FromStr;
-use u64_array_bigints::FromStrRadixErr;
 
 /// Coin holds some amount of one currency we convert from ProtoCoin to do more
 /// validation and provide a generally nicer interface
@@ -22,7 +21,7 @@ impl fmt::Display for Coin {
 }
 
 impl TryFrom<&str> for Coin {
-    type Error = FromStrRadixErr;
+    type Error = String;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         value.parse()
@@ -30,7 +29,9 @@ impl TryFrom<&str> for Coin {
 }
 
 impl FromStr for Coin {
-    type Err = FromStrRadixErr;
+    // note: this can't be `FromStrRadixErr` because it does not implement `Error`
+    // (because of no_std) and this causes problems downstream
+    type Err = String;
 
     fn from_str(value: &str) -> Result<Self, Self::Err> {
         let value = value.trim();
@@ -47,7 +48,7 @@ impl FromStr for Coin {
                 amount: v,
                 denom: denom.to_string(),
             }),
-            Err(e) => Err(e),
+            Err(e) => Err(e.to_string()),
         }
     }
 }
