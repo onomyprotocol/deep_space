@@ -28,7 +28,7 @@ serde_json = "1.0"
 sha2 = "0.10"
 tokio = { version = "1", features = ["time"] }
 tonic = { version = "0.6", features = ["compression"] }
-u64_array_bigints = { git = "https://github.com/AaronKutch/u64_array_bigints.git", rev = "91dd5758e76487f91d2ac3472be3fc98704aff3c", default-features = false, features = ["serde_support"] }
+u64_array_bigints = { version = "0.2", default-features = false, features = ["serde_support"] }
 unicode-normalization = { version = "0.1" }
 
 [dev-dependencies]
