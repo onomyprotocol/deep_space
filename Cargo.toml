@@ -26,7 +26,7 @@ serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 sha2 = "0.10"
-tokio = { version = "1", features = ["time"] }
+tokio = { version = "1.17", features = ["time"] }
 tonic = { version = "0.6", features = ["compression"] }
 u64_array_bigints = { version = "0.2", default-features = false, features = ["serde_support"] }
 unicode-normalization = { version = "0.1" }
