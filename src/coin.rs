@@ -43,7 +43,7 @@ impl FromStr for Coin {
             }
         }
         let (amount, denom) = value.split_at(split_idx);
-        match Uint256::from_dec_or_hex_str(amount) {
+        match Uint256::from_dec_or_hex_str_restricted(amount) {
             Ok(v) => Ok(Coin {
                 amount: v,
                 denom: denom.to_string(),
@@ -72,7 +72,7 @@ impl From<ProtoCoin> for Coin {
     fn from(value: ProtoCoin) -> Self {
         Coin {
             denom: value.denom,
-            amount: Uint256::from_dec_or_hex_str(&value.amount).unwrap(),
+            amount: Uint256::from_dec_or_hex_str_restricted(&value.amount).unwrap(),
         }
     }
 }

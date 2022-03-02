@@ -40,7 +40,7 @@ impl Contact {
         let val = res.into_inner().pool;
         let mut res = Vec::new();
         for v in val {
-            let parse_result = Uint256::from_dec_or_hex_str(&v.amount);
+            let parse_result = Uint256::from_dec_or_hex_str_restricted(&v.amount);
             match parse_result {
                 Ok(parse_result) => res.push(Coin {
                     denom: v.denom,
