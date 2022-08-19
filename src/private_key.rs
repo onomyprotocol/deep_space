@@ -14,6 +14,7 @@ use cosmos_sdk_proto::cosmos::tx::v1beta1::{
 use num::BigUint;
 use prost::Message;
 use secp256k1::constants::CURVE_ORDER as CurveN;
+use secp256k1::scalar::Scalar;
 use secp256k1::Message as CurveMessage;
 use secp256k1::Secp256k1;
 use secp256k1::{PublicKey as PublicKeyEC, SecretKey};
@@ -21,7 +22,7 @@ use sha2::Sha512;
 use sha2::{Digest, Sha256};
 use std::str::FromStr;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct MessageArgs {
     pub sequence: u64,
     pub fee: Fee,
@@ -330,7 +331,7 @@ fn get_child_key(
 
     let l_param = hasher.finalize().into_bytes();
 
-    // If you wanted to do this on your own (without add_assign)
+    // If you wanted to do this on your own (without add_tweak)
     // it would go like this
     //
     // but this implementation is not constant time and performs
@@ -350,7 +351,9 @@ fn get_child_key(
     // }
 
     let mut parse_i_l = SecretKey::from_slice(&l_param[0..32]).unwrap();
-    parse_i_l.add_assign(&k_parent).unwrap();
+    parse_i_l = parse_i_l
+        .add_tweak(&Scalar::from_be_bytes(k_parent).unwrap())
+        .unwrap();
     let child_key = parse_i_l;
 
     let mut child_key_res: [u8; 32] = [0; 32];
