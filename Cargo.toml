@@ -9,25 +9,25 @@ edition = "2021"
 
 [dependencies]
 base64 = "0.13"
-bech32 = "0.8"
-bytes = "1.0"
-cosmos-sdk-proto = { package = "cosmos-sdk-proto-althea", version = "0.9" }
+bech32 = "0.9"
+bytes = "1.2"
+cosmos-sdk-proto = { package = "cosmos-sdk-proto-althea", version = "0.13" }
 hmac = { version = "0.12" }
 log = "0.4"
 num = "0.4"
-pbkdf2 = { version = "0.10" }
-prost = "0.9"
-prost-types = "0.9"
+pbkdf2 = { version = "0.11" }
+prost = "0.10"
+prost-types = "0.10"
 rand = { version = "0.8" }
 ripemd = "0.1"
-rust_decimal = "1.9"
-secp256k1 = "0.21"
+rust_decimal = "1.26"
+secp256k1 = "0.24"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 sha2 = "0.10"
-tokio = { version = "1.17", features = ["time"] }
-tonic = { version = "0.6", features = ["compression"] }
+tokio = { version = "1.20", features = ["time"] }
+tonic = { version = "0.7", features = ["compression"] }
 u64_array_bigints = { version = "0.3", default-features = false, features = ["serde_support"] }
 unicode-normalization = { version = "0.1" }
 

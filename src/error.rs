@@ -203,7 +203,7 @@ impl From<bech32::Error> for AddressError {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum ByteDecodeError {
     DecodeError(Utf8Error),
     ParseError(ParseIntError),
