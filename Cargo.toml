@@ -8,32 +8,31 @@ license = "Apache-2.0"
 edition = "2021"
 
 [dependencies]
-base64 = "0.13"
+base64 = "0.21"
 bech32 = "0.9"
-bytes = "1.2"
+bytes = "1.5"
 cosmos-sdk-proto = { package = "cosmos-sdk-proto-althea", version = "0.13" }
-hmac = { version = "0.12" }
+hmac = "0.12"
 log = "0.4"
 num = "0.4"
-pbkdf2 = { version = "0.11" }
+pbkdf2 = "0.12"
 prost = "0.10"
 prost-types = "0.10"
-rand = { version = "0.8" }
+rand = "0.8"
 ripemd = "0.1"
-rust_decimal = "1.26"
-secp256k1 = "0.24"
+rust_decimal = "1"
+secp256k1 = "0.27"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 sha2 = "0.10"
-tokio = { version = "1.20", features = ["time"] }
+tokio = { version = "1", features = ["time"] }
 tonic = { version = "0.7", features = ["compression"] }
 u64_array_bigints = { version = "0.3", default-features = false, features = ["serde_support"] }
-unicode-normalization = { version = "0.1" }
+unicode-normalization = "0.1"
 
 [dev-dependencies]
-actix-rt = "2.2"
-env_logger = "0.9"
-rand = "0.8"
+actix-rt = "2.9"
+env_logger = "0.10"
 
 [features]

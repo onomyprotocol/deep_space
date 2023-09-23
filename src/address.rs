@@ -88,7 +88,7 @@ impl Address {
             return Err(AddressError::Bech32WrongLength);
         }
         addr.copy_from_slice(&vec);
-        Address::from_bytes(addr, &hrp)
+        Address::from_bytes(addr, hrp)
     }
 }
 

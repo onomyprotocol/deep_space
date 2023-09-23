@@ -44,6 +44,11 @@ struct TxParts {
 pub struct PrivateKey([u8; 32]);
 
 impl PrivateKey {
+    /// Create a private key directly from `array`
+    pub fn from_array(array: [u8; 32]) -> PrivateKey {
+        Self(array)
+    }
+
     /// Create a private key using an arbitrary slice of bytes. This function is not resistant to side
     /// channel attacks and may reveal your secret and private key. It is on the other hand more compact
     /// than the bip32+bip39 logic.

@@ -83,8 +83,8 @@ impl PublicKey {
     /// provided as a utility for one step creation and change of prefix if the conventions
     /// in `to_address()` are incorrect
     pub fn to_address_with_prefix(&self, prefix: &str) -> Result<Address, AddressError> {
-        let sha256 = Sha256::digest(&self.bytes);
-        let ripemd160 = Ripemd::digest(&sha256);
+        let sha256 = Sha256::digest(self.bytes);
+        let ripemd160 = Ripemd::digest(sha256);
         let mut bytes: [u8; 20] = Default::default();
         bytes.copy_from_slice(&ripemd160[..]);
         Address::from_bytes(bytes, prefix)
@@ -149,7 +149,7 @@ impl FromStr for PublicKey {
                 Err(PublicKeyError::HexDecodeErrorWrongLength)
             }
         } else {
-            match base64::decode(s) {
+            match base64::Engine::decode(&base64::engine::general_purpose::STANDARD_NO_PAD, s) {
                 Ok(bytes) => {
                     if bytes.len() == 33 {
                         let mut inner = [0; 33];
