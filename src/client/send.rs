@@ -137,13 +137,52 @@ impl Contact {
         wait_timeout: Option<Duration>,
         private_key: PrivateKey,
     ) -> Result<TxResponse, CosmosGrpcError> {
+        let mut res = self.internal_send_message(messages, memo.clone(), fee_coin, wait_timeout, private_key, None).await;
+        let mut retry = false;
+        for _ in 0..10 {
+            if let Err(CosmosGrpcError::RequestError { ref error }) = res {
+                let s = "account sequence mismatch, expected ";
+                if let Some(i) = error.message().find(s) {
+                    if i + s.len() < error.message().len() {
+                        let tmp = &error.message()[(i + s.len())..];
+                        if let Some(j) = tmp.find(',') {
+                            if let Ok(inc) = tmp[..j].trim().parse() {
+                                log::warn!("incrementing sequence number");
+                                res = self.internal_send_message(messages, memo.clone(), fee_coin, wait_timeout, private_key, Some(inc)).await;
+                                if res.is_err() {
+                                    retry = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if !retry {
+                break
+            }
+        }
+        res
+    }
+    async fn internal_send_message(
+        &self,
+        messages: &[Msg],
+        memo: Option<String>,
+        fee_coin: &[Coin],
+        wait_timeout: Option<Duration>,
+        private_key: PrivateKey,
+        inc: Option<u64>,
+    ) -> Result<TxResponse, CosmosGrpcError> {
         let our_address = private_key.to_address(&self.chain_prefix).unwrap();
         let memo = memo.unwrap_or_else(|| MEMO.to_string());
 
         let fee = self.get_fee_info(messages, fee_coin, private_key).await?;
 
-        let args = self.get_message_args(our_address, fee).await?;
-        trace!("got optional tx info");
+        let mut args = self.get_message_args(our_address, fee).await?;
+        if let Some(inc) = inc {
+            args.sequence += inc;
+        }
+        warn!("sequence number {}", args.sequence);
+        //trace!("got optional tx info");
 
         let msg_bytes = private_key.sign_std_msg(messages, args, memo)?;
 
